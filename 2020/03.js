@@ -38,7 +38,17 @@ const firstChallenge = data =>
 	calculateTreesInPath(data, [3, 1])
 
 const secondChallenge = data => {
-	return null
+	const paths = [
+		[1, 1],
+		[3, 1],
+		[5, 1],
+		[7, 1],
+		[1, 2],
+	]
+
+	return paths
+		.reduce((total, path) =>
+			total * calculateTreesInPath(data, path), 1)
 }
 
 
