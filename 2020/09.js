@@ -31,6 +31,44 @@ const firstChallenge = data => {
 }
 
 const secondChallenge = data => {
+	const errElement = firstChallenge(data)
+	const list = data.slice(0, data.findIndex(x => x === errElement))
+
+	const rangeSum = (list, [start, end]) =>
+		list.slice(start, end + 1)
+			.reduce((total, value) => total + value, 0)
+
+	const sumEdges = list =>
+		list.reduce(
+			([smallest, largest], val) => {
+				if (smallest === null)
+					return [val, val]
+
+				if (smallest > val)
+					return [val, largest]
+
+				if (largest < val)
+					return [smallest, val]
+
+				return [smallest, largest]
+			},
+			[null, null]
+		)
+			.reduce((total, val) => total + val, 0)
+
+	for (let i = 0, j = 1; j < list.length;) {
+		const sum = rangeSum(list, [i, j])
+
+		if (sum === errElement)
+			return sumEdges(list.slice(i, j + 1))
+
+		if (sum > errElement) i++
+		else j++
+
+		if (j <= i)
+			j = i + 1
+	}
+
 	return null
 }
 
