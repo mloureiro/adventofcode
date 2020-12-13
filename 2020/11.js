@@ -4,7 +4,6 @@ const data = fs.readFileSync('./11.txt')
 	.split('\n')
 	.filter(Boolean)
 
-const TOTAL_ITERATIONS = 4
 const MAX_OCCUPIED_SEATS = 3
 const state = {
 	EMPTY_SEAT: 'L',
@@ -72,13 +71,18 @@ const flip = (x, y, map) => {
 		: state.EMPTY_SEAT
 }
 
+const areMapEquals = (a, b) =>
+	mapToString(a) === mapToString(b)
+
 const mapClone = map => [...map.map(row => [...row])]
 
 const firstChallenge = data => {
 	let map = data.map(row => row.replace(/[^.]/g, '#').split(''))
 	const seatPositions = fetchAllSeatPositions(data)
 
-	for (let i = 0; i < TOTAL_ITERATIONS; i++) {
+	let i = 0
+	let hasMapChanged = true
+	while (hasMapChanged) {
 		let newMap = mapClone(map)
 
 		seatPositions
@@ -87,9 +91,8 @@ const firstChallenge = data => {
 					flip(x, y, newMap);
 			})
 
+		hasMapChanged = !areMapEquals(map, newMap)
 		map = newMap
-
-		console.log('Iteration: ', i + 1, '\n', mapToString(map))
 	}
 
 	return map.reduce(
