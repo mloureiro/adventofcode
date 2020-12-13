@@ -27,7 +27,35 @@ const firstChallenge = data => {
 }
 
 const secondChallenge = data => {
-	return null
+	const buildConnectionMap = list => {
+		const nodes = {}
+		for (let i = 0; i < list.length; i++) {
+			nodes[list[i]] = []
+			for (let j = 1; j <= 3 && i + j < list.length && list[i + j] - list[i] <= 3; j++)
+				nodes[list[i]].push(list[i + j])
+		}
+
+		return nodes
+	}
+
+	const countPathsRecursive = (currentNode, nodes, path) => {
+		const nextNodes = nodes[currentNode]
+		if (nextNodes.length === 0) {
+			console.log(`Found: [${path.join(', ')}, ${currentNode}]`)
+			return 1
+		}
+
+		return nextNodes.reduce(
+			(total, nextNode) =>
+				total + countPathsRecursive(nextNode, nodes, [...path, currentNode]),
+			0,
+		)
+	}
+
+	const nodes = buildConnectionMap(data)
+	console.log(nodes)
+
+	return countPathsRecursive(0, nodes, [])
 }
 
 console.log(`
