@@ -26,7 +26,19 @@ const firstChallenge = data => {
 }
 
 const secondChallenge = data => {
-	return null
+	let validEntries = 0
+	for (let entry of data) {
+		const { min, max, char, pass } = parseEntry(entry)
+
+		const first = pass[min - 1]
+		const last = pass[max - 1]
+
+		if (first === char && last !== char
+			|| first !== char && last === char)
+			validEntries++
+	}
+
+	return validEntries
 }
 
 console.log(`
