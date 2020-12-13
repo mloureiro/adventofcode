@@ -1,5 +1,5 @@
 const fs = require('fs')
-const data = fs.readFileSync('./10-e1.txt')
+const data = fs.readFileSync('./10.txt')
 	.toString()
 	.split('\n')
 	.filter(Boolean)
@@ -29,33 +29,41 @@ const firstChallenge = data => {
 const secondChallenge = data => {
 	const buildConnectionMap = list => {
 		const nodes = {}
-		for (let i = 0; i < list.length; i++) {
+		nodes[list[0]] = []
+		for (let i = 1; i < list.length; i++) {
 			nodes[list[i]] = []
-			for (let j = 1; j <= 3 && i + j < list.length && list[i + j] - list[i] <= 3; j++)
-				nodes[list[i]].push(list[i + j])
+			for (let j = 1; j <= 3 && i - j >= 0 && list[i] - list[i - j] <= 3; j++)
+				nodes[list[i]].push(list[i - j])
 		}
 
 		return nodes
 	}
 
-	const countPathsRecursive = (currentNode, nodes, path) => {
-		const nextNodes = nodes[currentNode]
-		if (nextNodes.length === 0) {
-			console.log(`Found: [${path.join(', ')}, ${currentNode}]`)
-			return 1
-		}
 
-		return nextNodes.reduce(
-			(total, nextNode) =>
-				total + countPathsRecursive(nextNode, nodes, [...path, currentNode]),
-			0,
-		)
+	const countPathsRecursive = nodes => {
+		const pathsTillNode = {}
+		return Object.keys(nodes)
+			.reduce((total, node) => {
+				const connections = nodes[node]
+
+				let paths = 0
+				if (connections.length === 0) {
+					paths = 1
+				} else {
+					for (const previousNode of connections)
+						paths += pathsTillNode[previousNode]
+				}
+
+				pathsTillNode[node] = paths
+
+				return paths
+			}, 0)
 	}
 
 	const nodes = buildConnectionMap(data)
-	console.log(nodes)
+	//console.log(nodes)
 
-	return countPathsRecursive(0, nodes, [])
+	return countPathsRecursive(nodes)
 }
 
 console.log(`
