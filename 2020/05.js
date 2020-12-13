@@ -29,7 +29,24 @@ const firstChallenge = data =>
 	)
 
 const secondChallenge = data => {
-	return null
+	const keyMap = data.reduce((keyMap, hash) => {
+		const bin = hashToBinary(hash)
+		keyMap[binToDec(bin)] = hash
+
+		return keyMap
+	}, {})
+
+	const seatKey = Object.keys(keyMap)
+		.find(key => {
+			const int = parseInt(key, 10)
+
+			return Boolean(!keyMap[int + 1])
+		})
+
+	const [row, col] = decomposeSeat(hashToBinary(keyMap[seatKey]))
+		.map(binToDec)
+
+	return calculateSeatId(row, col + 1)
 }
 
 console.log(`
