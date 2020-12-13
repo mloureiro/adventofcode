@@ -72,7 +72,34 @@ const firstChallenge = data => {
 }
 
 const secondChallenge = data => {
-	return null
+	const buildColorMap = ruleList => ruleList.reduce(
+		(colorMap, rule) => {
+			const [outer, innerList] = decomposeRule(rule)
+
+			colorMap[outer] = innerList
+
+			return colorMap
+		},
+		{},
+	)
+
+	const recursiveCount = (map, currentColor) => {
+		const innerList = map[currentColor]
+
+		if (innerList === 0)
+			// 0 because we're already counting the value in the reduce (colorTotal + ...)
+			return 0
+
+		return innerList.reduce(
+			(total, { name: colorName, total: colorTotal }) =>
+				total + colorTotal + colorTotal * recursiveCount(map, colorName),
+			0,
+		)
+	}
+
+	const colorMap = buildColorMap(data)
+
+	return recursiveCount(colorMap, MY_BAG_COLOR)
 }
 
 console.log(`
