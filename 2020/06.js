@@ -17,9 +17,24 @@ const firstChallenge = data =>
 		[0, {}],
 	)[0]
 
-const secondChallenge = data => {
-	return null
-}
+const secondChallenge = data =>
+	data.reduce(
+		([total, groupSize, group], answers) => {
+			if (!answers) {
+				const completeGroupAnswerTotal = Object.keys(group)
+					.reduce((total, key) =>
+						group[key] === groupSize ? total + 1 : total, 0)
+
+				return [total + completeGroupAnswerTotal, 0, {}]
+			}
+
+			answers.split('')
+				.forEach(answer => group[answer] = (group[answer] || 0) + 1)
+
+			return [total, groupSize + 1, group]
+		},
+		[0, 0, {}],
+	)[0]
 
 console.log(`
 Result
