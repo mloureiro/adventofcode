@@ -69,7 +69,61 @@ const firstChallenge = data => {
 }
 
 const secondChallenge = data => {
-	return null
+	const moveShip = ([x, y], [wx, wy], amount) => [
+		x + (wx * amount),
+		y + (wy * amount),
+	]
+
+	const rotateWaypoint = (initialCoordinates, [side, degrees]) => {
+		const shiftRight = ([x, y]) => [y, x * -1]
+		const shiftLeft = ([x, y]) => [y * -1, x]
+		const shift = side === 'R' ? shiftRight : shiftLeft
+
+		let currentCoordinates = initialCoordinates
+		const shifts = (degrees / 90) % 4
+		for (let i = 0; i < shifts; i++) {
+			currentCoordinates = shift(currentCoordinates)
+		}
+
+		return currentCoordinates
+	}
+
+	let waypointCoordinates = [10, 1]
+	let shipCoordinates = [0, 0]
+
+	for (let instruction of data) {
+		const [action, amount] = parseInstruction(instruction)
+		const isShipInstruction = action === 'F'
+		if (isShipInstruction) {
+			shipCoordinates = moveShip(
+				shipCoordinates,
+				waypointCoordinates,
+				amount
+			)
+		} else {
+			switch (action) {
+				case 'N':
+					waypointCoordinates[1] += amount
+					break;
+				case 'E':
+					waypointCoordinates[0] += amount
+					break
+				case 'S':
+					waypointCoordinates[1] -= amount
+					break
+				case 'W':
+					waypointCoordinates[0] -= amount
+					break
+				case 'R':
+				case 'L':
+					waypointCoordinates =
+						rotateWaypoint(waypointCoordinates, [action, amount])
+			}
+		}
+
+	}
+
+	return Math.abs(shipCoordinates[0]) + Math.abs(shipCoordinates[1])
 }
 
 console.log(`
