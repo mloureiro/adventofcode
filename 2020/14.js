@@ -1,8 +1,8 @@
 const fs = require('fs')
 const data = fs.readFileSync('./14.txt')
 	.toString()
+	.trim()
 	.split('\n')
-	.filter(Boolean)
 
 const firstChallenge = data => {
 	const isMask = line =>
@@ -24,18 +24,13 @@ const firstChallenge = data => {
 		const memoryPointers = {}
 		let currentMask = ''
 		for (let row of data) {
-			console.group('Parsing instruction:', row)
 			if (isMask(row)) {
 				currentMask = parseMask(row)
-				console.log('New mask:', currentMask)
 			} else {
 				const [position, value] = parseMemoryAssignment(row)
-				console.log('New Instruction:', `[${position}, ${value}]`)
 
 				memoryPointers[position] = [currentMask, value]
 			}
-
-			console.groupEnd()
 		}
 
 		return Object.values(memoryPointers)
@@ -46,9 +41,9 @@ const firstChallenge = data => {
 		if (number < 0)
 			number = number >>> 0;
 
-		while(Math.ceil(number/2) > 0) {
-			binary = number%2 + binary;
-			number = Math.floor(number/2);
+		while (Math.ceil(number / 2) > 0) {
+			binary = number % 2 + binary;
+			number = Math.floor(number / 2);
 		}
 
 		return binary;
@@ -80,7 +75,88 @@ const firstChallenge = data => {
 }
 
 const secondChallenge = data => {
-	return null
+	const instructions = data.map(line => {
+		if (line.includes('mask'))
+			return {
+				type: 'mask',
+				value: line.replace(/^mask = /, '')
+			}
+
+		const [, address, value] = line.match(/^mem\[(\d+)\] = (\d+)$/)
+		return {
+			type: 'write',
+			address: parseInt(address, 10),
+			value: parseInt(value, 10),
+		}
+	})
+
+	const applyMask = (address, mask) => {
+		let addressClone = address.split('')
+		for (let i = 0; i < mask.length; i++)
+			if (mask[i] === '1' || mask[i] === 'X')
+				addressClone[i] = mask[i]
+
+		return addressClone.join('')
+	}
+
+	const replaceAtPosition = (string, position, replacement) =>
+		`${string.slice(0, position)}${replacement}${string.slice(position + 1)}`
+
+	const buildFloatingVariations = (addressList) => {
+		const newList = []
+		let isChanged = false
+		for (let address of addressList) {
+			const xPosition = address.indexOf('X')
+			if (xPosition > -1) {
+				newList.push(
+					replaceAtPosition(address, xPosition, '0'),
+					replaceAtPosition(address, xPosition, '1'),
+				);
+				isChanged = true
+			}
+		}
+
+		if (!isChanged)
+			return addressList
+
+		return buildFloatingVariations(newList)
+	}
+
+	const input = instructions.map(instruction => {
+		let {type, address} = instruction
+
+		if (type !== 'write')
+			return instruction
+
+		const binaryAddress = address.toString(2)
+			.padStart(36, '0')
+
+		return {
+			...instruction,
+			address: binaryAddress,
+		}
+	})
+
+	let memory = {}
+	let currentMask = '';
+	for (let line of input) {
+		const {type, address, value} = line
+
+		if (type === 'mask') {
+			currentMask = value
+			continue
+		}
+
+		const maskedAddress = applyMask(address, currentMask)
+
+		const addressList = buildFloatingVariations([maskedAddress])
+			.map(a => parseInt(a, 2))
+
+		for (let address of addressList)
+			memory[address] = value
+	}
+
+	return Object.values(memory).reduce((t, v) => t + v)
 }
 
 console.log(`
