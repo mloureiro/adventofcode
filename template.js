@@ -1,8 +1,8 @@
 const fs = require('fs')
 const data = fs.readFileSync('./input.txt')
 	.toString()
+	.trim()
 	.split('\n')
-	.filter(Boolean)
 
 const firstChallenge = data => {
 	return null
