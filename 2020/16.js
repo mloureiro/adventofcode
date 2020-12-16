@@ -73,7 +73,49 @@ const firstChallenge = data => {
 }
 
 const secondChallenge = data => {
-	return null
+	const removeInvalidTickets = (tickets, rules) =>
+		tickets.filter(ticket =>
+			ticket.every(value =>
+				rules.find(([min, max]) => min <= value && value <= max)))
+
+	const input = prepareInput(data)
+
+	const validTickets = removeInvalidTickets(
+		input.nearbyTickets,
+		[].concat(...input.rules.map(rule => rule.rangeList)),
+	)
+
+	let ruleMap = []
+	for (let i = 0; i < input.rules.length; i ++) {
+		const rules = input.rules[i].rangeList
+		ruleMap[i] = []
+		for (let j = 0; j < validTickets[0].length; j++) {
+			let isRuleValidForPosition = true
+			for (let k = 0; isRuleValidForPosition && k < validTickets.length; k++) {
+				const current = validTickets[k][j]
+				isRuleValidForPosition = rules.some(([min, max]) => min <= current && current <= max)
+			}
+
+			if (isRuleValidForPosition)
+				ruleMap[i].push(j)
+		}
+	}
+
+	const positions = Array(input.rules.length).fill(null)
+	for (let i = 0; i < ruleMap.length; i++) {
+		if (ruleMap[i].length === 1) {
+			const nextPosition = ruleMap[i][0]
+			positions[i] = nextPosition
+
+			ruleMap = ruleMap.map(rule =>
+				rule.filter(position => position !== nextPosition))
+
+			i = -1
+		}
+	}
+
+	return input.rules.filter(rule => rule.field.includes('departure'))
+		.reduce((total, {position}) => total * input.ownTicket[positions[position]], 1)
 }
 
 console.log(`
