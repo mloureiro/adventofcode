@@ -82,7 +82,7 @@ const firstChallenge = data => {
 		}
 		console.groupEnd()
 	}
-	
+
 	const evaluate = (currentState = null, totalActiveSurroundings) =>
 		totalActiveSurroundings === 3
 		|| currentState === STATE.active && totalActiveSurroundings === 2
@@ -116,8 +116,146 @@ const firstChallenge = data => {
 	return Object.values(space).length
 }
 
+const key = coordinates =>
+	`[${coordinates.join(',')}]`
+
+const unwrapKey = key =>
+	key.replace(/(\[|\]|\s)/g, '')
+		.split(',')
+		.map(p => parseInt(p, 10))
+
+const getSurroundingCoordinates = coordinate => {
+	const recursive = coordinate => {
+		if (!coordinate || coordinate.length === 0)
+			return null
+
+		const currentDimension = coordinate.pop()
+		const positions = [
+			currentDimension + -1,
+			currentDimension + 0,
+			currentDimension + 1
+		]
+
+		if (coordinate.length === 0)
+			return positions.map(p => [p])
+
+		const children = recursive(coordinate)
+
+		const coordinates = []
+		for (let position of positions)
+			for (let child of children)
+				coordinates.push([...child, position])
+
+		return coordinates
+	}
+
+	const extractCurrentCoordinate = (coordinate, surroundings) =>
+		surroundings
+			.filter(current => current.join(',') !== coordinate.join(','))
+
+	return extractCurrentCoordinate(coordinate, recursive([...coordinate]))
+}
+
+const parseSpace = (rawSpace, totalDimensions) => {
+	const recursive = (list, coordinate = []) => {
+		if (!Array.isArray(list))
+			return [[coordinate, list]]
+
+
+		return [].concat(
+			...list.map(
+				(value, idx) => recursive(value, [...coordinate, idx])
+			)
+		)
+	}
+
+	return Object.fromEntries(
+		recursive(rawSpace)
+		.map(([coordinates, value]) => {
+			while(coordinates.length < totalDimensions)
+				coordinates.push(0)
+
+			return [key(coordinates), value]
+		})
+	)
+}
+
+const calculateOuterLayerCoordinates = space => {
+	const isMin = position => position % 2 === 0
+	const deviation = position => isMin(position) ? -1 : 1
+
+	return Object.keys(space).reduce(
+		(coordinates, key) => {
+			const keyCoordinates = unwrapKey(key)
+
+			if (coordinates.length === 0)
+				return Array(keyCoordinates.length * 2).fill(0)
+					.map((_, idx) => keyCoordinates[Math.floor(idx / 2)] + deviation(idx))
+
+			for (let i = 0; i < coordinates.length; i++) {
+				const j = Math.floor(i / 2)
+				const result = keyCoordinates[j] + deviation(i)
+				if (
+					isMin(i) && coordinates[i] > result
+					|| !isMin(i) && coordinates[i] < result
+				)
+					coordinates[i] = result
+			}
+
+			return coordinates
+		},
+		[],
+	)
+}
+
+const calculateAllPositionsForRanges = ([min, max, ...rest]) => {
+	if (typeof min === 'undefined')
+		return []
+
+	const variations = []
+	for (let i = min; i <= max; i++)
+		variations.push(i)
+
+	if (!rest || rest.length === 0)
+		return variations
+
+	const children = calculateAllPositionsForRanges(rest)
+
+	return [].concat(
+		...variations
+			.map(v => children.map(c => Array.isArray(c) ? [v, ...c] : [v, c]))
+	)
+}
+
 const secondChallenge = data => {
-	return null
+	const TOTAL_DIMENSIONS = 4
+
+	let space = parseSpace(data, TOTAL_DIMENSIONS)
+
+	for (let i = 0; i < TOTAL_CYCLES; i++) {
+		const coordinates = calculateAllPositionsForRanges(
+			calculateOuterLayerCoordinates(space)
+		)
+
+		const newSpace = {}
+		while (coordinates.length) {
+			const next = coordinates.shift()
+			const nextKey = key(next)
+			const totalActiveSurroundings = getSurroundingCoordinates(next)
+				.filter(current => space[key(current)] === STATE.active)
+				.length
+
+			if (
+				totalActiveSurroundings === 3
+				|| space[nextKey] === STATE.active && totalActiveSurroundings === 2
+			)
+				newSpace[nextKey] = STATE.active
+		}
+
+		space = newSpace
+	}
+
+	return Object.values(space).length
 }
 
 console.log(`
