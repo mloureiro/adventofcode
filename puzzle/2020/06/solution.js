@@ -1,9 +1,7 @@
-const fs = require('fs')
-const data = fs.readFileSync('./06.txt')
-	.toString()
-	.split('\n')
+export const formatInput = input => input.split('\n');
 
-const firstChallenge = data =>
+// TODO fix it (not working currently 🤔)
+export const part1 = data =>
 	data.reduce(
 		([total, group], answers) => {
 			if (!answers)
@@ -17,7 +15,7 @@ const firstChallenge = data =>
 		[0, {}],
 	)[0]
 
-const secondChallenge = data =>
+export const part2 = data =>
 	data.reduce(
 		([total, groupSize, group], answers) => {
 			if (!answers) {
@@ -35,9 +33,3 @@ const secondChallenge = data =>
 		},
 		[0, 0, {}],
 	)[0]
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
