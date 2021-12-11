@@ -73,6 +73,7 @@ const runPuzzle = async (year, day, { test, watch, debug }) => {
 				test.part === 1 ? part1 : part2,
 				formatInput(test.input),
 				test.result,
+				test.args,
 			]);
 	}
 
@@ -85,7 +86,7 @@ const runPuzzle = async (year, day, { test, watch, debug }) => {
 	});
 };
 
-const runTest = (label, solution, input, expectedResult) => {
+const runTest = (label, solution, input, expectedResult, extraArgs = []) => {
 	const logLabel = string => string.padStart(10);
 	const log = (label, ...messages) =>
 		console.log(`${logLabel(label)}:`, ...messages);
@@ -93,7 +94,7 @@ const runTest = (label, solution, input, expectedResult) => {
 	console.log();
 	console.time(logLabel('Time'));
 	try {
-		const result = solution(input);
+		const result = solution(input, ...extraArgs);
 
 		if (!expectedResult)
 			log(label, chalk.white(result));
@@ -128,7 +129,7 @@ const makePathFromScript = (...parts) =>
 		.replace(/^[^/]*/, '');
 
 const makePathToPuzzle = (year, day, ...rest) =>
-	makePathFromScript('..', 'puzzle', year, day, ...rest);
+	makePathFromScript('..', 'puzzle', year, day.padStart(2, '0'), ...rest);
 
 const hasFile = async path => {
 	try {
