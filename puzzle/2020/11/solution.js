@@ -1,8 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./11.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
+export const formatInput = input => input.split('\n');
 
 const state = {
 	EMPTY_SEAT: 'L',
@@ -46,7 +42,7 @@ const mapClone = map => [...map.map(row => [...row])]
 
 const defineMap = (initialMap, shouldFlip) => {
 	let map = initialMap.map(row => row.replace(/[^.]/g, '#').split(''))
-	const seatPositions = fetchAllSeatPositions(data)
+	const seatPositions = fetchAllSeatPositions(initialMap)
 
 	let hasMapChanged = true
 	while (hasMapChanged) {
@@ -74,8 +70,7 @@ const countOccupiedSeats = map =>
 		0,
 	)
 
-
-const firstChallenge = data => {
+export const part1 = data => {
 	const MAX_OCCUPIED_SEATS = 3
 
 	const fetchAdjacentWithState = (x, y, filterState, map) => {
@@ -112,7 +107,7 @@ const firstChallenge = data => {
 	return countOccupiedSeats(defineMap(data, shouldFlip))
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const MAX_OCCUPIED_SEATS = 4
 
 	const fetchWithinVisionWithState = (x, y, filteredState, map) => {
@@ -164,9 +159,3 @@ const secondChallenge = data => {
 
 	return countOccupiedSeats(defineMap(data, shouldFlip))
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
