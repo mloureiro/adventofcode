@@ -56,14 +56,15 @@ const scaffold = async (year, day, { force }) => {
 const runPuzzle = async (year, day, { test, watch, debug }) => {
 	if (watch) throw Error('Watch is not implemented yet'); // TODO
 
-	const { formatInput, part1, part2 } = await import(makePathToPuzzle(year, day, template.solution));
+	const { formatInput, part1, part2, validation = [] } = await import(makePathToPuzzle(year, day, template.solution));
 	const input = formatInput((await readFile(makePathToPuzzle(year, day, template.input), 'utf8')).trim());
 
 	let testsToRun;
 	if (!test) {
+		const [result1, result2] = validation;
 		testsToRun = [
-			['Part 1', part1, input],
-			['Part 2', part2, input],
+			['Part 1', part1, input, result1],
+			['Part 2', part2, input, result2],
 		];
 	} else {
 		const testFile = makePathToPuzzle(year, day, template.tests);

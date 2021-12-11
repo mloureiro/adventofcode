@@ -1,3 +1,5 @@
+export const validation = [876459, 116168640];
+
 export const formatInput = input => input.split('\n').map(Number);
 
 const MATCH = 2020

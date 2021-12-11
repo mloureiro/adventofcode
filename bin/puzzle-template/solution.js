@@ -1,3 +1,5 @@
+export const validation = [];
+
 export const formatInput = input => input;
 
 export const part1 = input => {
