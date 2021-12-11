@@ -1,9 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./15.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
-	.map(string => parseInt(string, 10))
+export const formatInput = input => input.split(',').map(Number);
 
 const calculateValueInIteration = (data, iteration) => {
 	const calculatePosition = (position, {previousPosition}) => ({
@@ -31,16 +26,10 @@ const calculateValueInIteration = (data, iteration) => {
 	return previousNumber
 }
 
-const firstChallenge = data => {
+export const part1 = data => {
 	return calculateValueInIteration(data, 2020)
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	return calculateValueInIteration(data, 30000000)
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
