@@ -1,8 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./02.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
+export const formatInput = input => input.split('\n');
 
 const parseEntry = entry => {
 	const [, min, max, char, pass] = /^(\d+)-(\d+) ([a-z\d]*): (.*)$/i.exec(entry)
@@ -10,7 +6,7 @@ const parseEntry = entry => {
 	return { min, max, char, pass }
 }
 
-const firstChallenge = data => {
+export const part1 = data => {
 	let validEntries = 0
 	for (let entry of data) {
 		const { min, max, char, pass } = parseEntry(entry)
@@ -25,7 +21,7 @@ const firstChallenge = data => {
 	return validEntries
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	let validEntries = 0
 	for (let entry of data) {
 		const { min, max, char, pass } = parseEntry(entry)
@@ -40,9 +36,3 @@ const secondChallenge = data => {
 
 	return validEntries
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
