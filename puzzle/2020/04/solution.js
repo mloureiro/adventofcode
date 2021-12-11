@@ -1,7 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./04.txt')
-	.toString()
-	.split('\n')
+export const formatInput = input => input.split('\n');
 
 // this does way too much, but it is to make less iterations
 const parseValidateAndCountDocuments = (data, isDocumentValid) =>
@@ -19,7 +16,7 @@ const parseValidateAndCountDocuments = (data, isDocumentValid) =>
 		[0, {}],
 	)[0]
 
-const firstChallenge = data => {
+export const part1 = data => {
 	const REQUIRED_FIELDS = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
 	const isDocumentValid = document =>
 		REQUIRED_FIELDS.every(field => Boolean(document[field]))
@@ -27,7 +24,7 @@ const firstChallenge = data => {
 	return parseValidateAndCountDocuments(data, isDocumentValid)
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const isStringNumber = str => !isNaN(str)
 	const isNumberBetween = (str, min, max) => {
 		const num = parseInt(str, 10)
@@ -59,9 +56,3 @@ const secondChallenge = data => {
 
 	return parseValidateAndCountDocuments(data, isDocumentValid)
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
