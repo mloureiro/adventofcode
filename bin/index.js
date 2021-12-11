@@ -86,7 +86,7 @@ const runPuzzle = async (year, day, { test, watch, debug }) => {
 	});
 };
 
-const runTest = (label, solution, input, expectedResult, extraArgs = []) => {
+const runTest = (label, solution, input, expectedResult = null, extraArgs = []) => {
 	const logLabel = string => string.padStart(10);
 	const log = (label, ...messages) =>
 		console.log(`${logLabel(label)}:`, ...messages);
@@ -96,7 +96,7 @@ const runTest = (label, solution, input, expectedResult, extraArgs = []) => {
 	try {
 		const result = solution(input, ...extraArgs);
 
-		if (!expectedResult)
+		if (expectedResult === null)
 			log(label, chalk.white(result));
 		else if (expectedResult === result)
 			log(label, chalk.green('✔︎'), chalk.white(result));
