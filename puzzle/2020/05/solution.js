@@ -1,8 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./05.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
+export const formatInput = input => input.split('\n');
 
 const calculateSeatId = (col, row) => col * 8 + row
 const hashToBinary = hash => hash.replace(/[BR]/gi, '1').replace(/[FL]/gi, '0')
@@ -14,7 +10,7 @@ const decomposeSeat = hash => {
 	return [row, col]
 }
 
-const firstChallenge = data =>
+export const part1 = data =>
 	data.reduce(
 		(max, hash) => {
 			const id = calculateSeatId(
@@ -28,7 +24,7 @@ const firstChallenge = data =>
 		0,
 	)
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const keyMap = data.reduce((keyMap, hash) => {
 		const bin = hashToBinary(hash)
 		keyMap[binToDec(bin)] = hash
@@ -48,9 +44,3 @@ const secondChallenge = data => {
 
 	return calculateSeatId(row, col + 1)
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
