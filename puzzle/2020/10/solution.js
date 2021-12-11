@@ -1,16 +1,10 @@
-const fs = require('fs')
-const data = fs.readFileSync('./10.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
-	.map(row => parseInt(row, 10))
-	.sort((a, b) => a < b ? -1 : 1)
+export const formatInput = input => input.split('\n').map(Number).sort((a, b) => a - b);
 
-// add edges
-data.unshift(0)
-data.push(data[data.length - 1] + 3)
+export const part1 = data => {
+	// add edges
+	data.unshift(0)
+	data.push(data[data.length - 1] + 3)
 
-const firstChallenge = data => {
 	let single = 0
 	let triple = 0
 	for (let i = 1; i < data.length; i++) {
@@ -26,7 +20,11 @@ const firstChallenge = data => {
 	return single * triple
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
+	// add edges
+	data.unshift(0)
+	data.push(data[data.length - 1] + 3)
+
 	const buildConnectionMap = list => {
 		const nodes = {}
 		nodes[list[0]] = []
@@ -38,7 +36,6 @@ const secondChallenge = data => {
 
 		return nodes
 	}
-
 
 	const countPathsRecursive = nodes => {
 		const pathsTillNode = {}
@@ -61,13 +58,6 @@ const secondChallenge = data => {
 	}
 
 	const nodes = buildConnectionMap(data)
-	//console.log(nodes)
 
 	return countPathsRecursive(nodes)
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
