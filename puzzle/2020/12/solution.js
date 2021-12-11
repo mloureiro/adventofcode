@@ -1,8 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./12.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
+export const formatInput = input => input.split('\n').filter(Boolean);
 
 const INITIAL_DIRECTION = 'E'
 const COMPASS = ['N', 'E', 'S', 'W']
@@ -31,7 +27,7 @@ const rotate = (currentDirection, [side, degrees]) => {
 	return COMPASS[newDirection]
 }
 
-const firstChallenge = data => {
+export const part1 = data => {
 	const executeAction = ([action, amount], direction, [x, y]) => {
 		const actionToBeExecuted = action !== 'F' ? action : direction
 
@@ -68,7 +64,7 @@ const firstChallenge = data => {
 	return Math.abs(position[0]) + Math.abs(position[1])
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const moveShip = ([x, y], [wx, wy], amount) => [
 		x + (wx * amount),
 		y + (wy * amount),
@@ -125,9 +121,3 @@ const secondChallenge = data => {
 
 	return Math.abs(shipCoordinates[0]) + Math.abs(shipCoordinates[1])
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
