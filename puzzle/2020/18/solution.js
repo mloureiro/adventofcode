@@ -1,8 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./18.txt')
-	.toString()
-	.trim()
-	.split('\n')
+export const formatInput = input => input.split('\n');
 
 const isNumber = value => !isNaN(value)
 const isOperator = character => ['+', '-', '/', '*'].includes(character)
@@ -75,7 +71,7 @@ const parseInstructions = line => {
 	return instructions;
 }
 
-const firstChallenge = data => {
+export const part1 = data => {
 	const calculate = instructions => {
 		let remainingInstructions = instructions
 		let total = 0
@@ -108,7 +104,7 @@ const firstChallenge = data => {
 	)
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const calculate = instructions => {
 
 		let remainingInstructions = instructions.reduce(
@@ -167,9 +163,3 @@ const secondChallenge = data => {
 		0,
 	)
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
