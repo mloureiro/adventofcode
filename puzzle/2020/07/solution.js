@@ -1,8 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./07.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
+export const formatInput = input => input.split('\n');
 
 const MY_BAG_COLOR = 'shiny gold'
 
@@ -24,7 +20,7 @@ const decomposeRule = rule => {
 	return [outerColor, innerColorList]
 }
 
-const firstChallenge = data => {
+export const part1 = data => {
 	const buildColorMap = ruleList => ruleList.reduce(
 		(colorMap, rule) => {
 			const [outer, innerList] = decomposeRule(rule)
@@ -71,7 +67,7 @@ const firstChallenge = data => {
 	return recursiveCount(colorMap, colorMap[MY_BAG_COLOR], [])
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const buildColorMap = ruleList => ruleList.reduce(
 		(colorMap, rule) => {
 			const [outer, innerList] = decomposeRule(rule)
@@ -102,8 +98,3 @@ const secondChallenge = data => {
 	return recursiveCount(colorMap, MY_BAG_COLOR)
 }
 
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
