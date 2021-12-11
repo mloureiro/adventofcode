@@ -1,9 +1,13 @@
-const fs = require('fs')
-const data = fs.readFileSync('./16.txt')
-	.toString()
-	.trim()
-	.split('\n\n')
-	.map(block => block.split('\n'))
+export const formatInput = input => {
+	const [rawRuleList, rawTicket, rawTickets] = input.split('\n\n').map(block => block.split('\n'))
+
+	return {
+		rules: parseRuleList(rawRuleList),
+		ownTicket: parseTicket(rawTicket[1]),
+		nearbyTickets: rawTickets.filter(line => !line.includes('ticket'))
+			.map(parseTicket)
+	}
+}
 
 const parseRuleList = list => list.map(
 	(line, idx) => ({
@@ -18,20 +22,7 @@ const parseRuleList = list => list.map(
 const parseTicket = rawTicket =>
 	rawTicket.split(',').map(v => parseInt(v, 10))
 
-
-const prepareInput = data => {
-	const [rawRuleList, rawTicket, rawTickets] = data
-
-	return {
-		rules: parseRuleList(rawRuleList),
-		ownTicket: parseTicket(rawTicket[1]),
-		nearbyTickets: rawTickets.filter(line => !line.includes('ticket'))
-			.map(parseTicket)
-	}
-}
-
-
-const firstChallenge = data => {
+export const part1 = input => {
 	const mergeRangeList = rangeList =>
 		rangeList.sort(([aMin], [bMin]) => aMin < bMin ? -1 : 1)
 			.reduce(
@@ -54,31 +45,28 @@ const firstChallenge = data => {
 				[],
 			)
 
-	const input = prepareInput(data)
 	const ruleRangeList = mergeRangeList(input.rules
 		.reduce((list, rule) => [...list, ...rule.rangeList], []))
 
 	return input.nearbyTickets
 		.reduce((errorRate, ticket) =>
-			errorRate + ticket.reduce(
-				(errors, value) =>
-					ruleRangeList
-						.find(([min, max]) => min <= value && value <= max)
+				errorRate + ticket.reduce(
+					(errors, value) =>
+						ruleRangeList
+							.find(([min, max]) => min <= value && value <= max)
 							? errors
 							: errors + value,
-				0,
-			),
+					0,
+				),
 			0,
 		)
 }
 
-const secondChallenge = data => {
+export const part2 = input => {
 	const removeInvalidTickets = (tickets, rules) =>
 		tickets.filter(ticket =>
 			ticket.every(value =>
 				rules.find(([min, max]) => min <= value && value <= max)))
-
-	const input = prepareInput(data)
 
 	const validTickets = removeInvalidTickets(
 		input.nearbyTickets,
@@ -117,9 +105,3 @@ const secondChallenge = data => {
 	return input.rules.filter(rule => rule.field.includes('departure'))
 		.reduce((total, {position}) => total * input.ownTicket[positions[position]], 1)
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
