@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-import { copyFile, mkdir, readdir, readFile, stat } from 'fs/promises';
+import { copyFile, mkdir, readdir, readFile, stat, writeFile} from 'fs/promises';
 import path from 'path';
 import { Command } from 'commander';
 import chalk from 'chalk';
+import { initClient } from '../lib/client.js';
 
 const template = {
 	directory: 'puzzle-template',
@@ -40,6 +41,15 @@ const scaffold = async (year, day, { force }) => {
 	if (missingFiles.length)
 		throw Error(`Files "${missingFiles.join('", "')}" are missing from template directory.`);
 
+	const aocClient = initClient(year, day);
+	let input;
+	try {
+		input = await aocClient.fetchInput();
+	} catch (error) {
+		if (!force)
+			throw error;
+	}
+
 	const pathToPuzzleDirectory = makePathToPuzzle(year, day);
 	// ensure that the target puzzle is not yet set
 	if (await hasFile(pathToPuzzleDirectory)) {
@@ -52,6 +62,16 @@ const scaffold = async (year, day, { force }) => {
 		makePathFromScript(template.directory, file),
 		makePathToPuzzle(year, day, file),
 	)));
+	await writeFile(makePathToPuzzle(year, day, template.input), input);
+
+	console.log();
+	console.log(chalk.bold.whiteBright('Done!'));
+	console.log(chalk.bold.whiteBright('Puzzle:'.padEnd(10)), aocClient.url)
+	console.log(
+		chalk.bold.whiteBright('Solution:'.padEnd(10)),
+		makePathToPuzzle(year, day, template.solution),
+	);
+	console.log();
 };
 
 const runPuzzle = async (year, day, { test, watch, debug, validate }) => {

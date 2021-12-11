@@ -1,4 +1,2 @@
-# ignore all input content from Advent of Code
-*.txt
-
+.env
 node_modules/
