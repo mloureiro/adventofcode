@@ -1,3 +1,5 @@
+export const validation = [572, 306];
+
 export const formatInput = input => input.split('\n');
 
 const parseEntry = entry => {

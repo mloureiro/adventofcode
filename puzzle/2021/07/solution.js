@@ -1,3 +1,5 @@
+export const validation = [342730, 92335207];
+
 export const formatInput = input => input.split(',').map(Number);
 
 export const part1 = input => {

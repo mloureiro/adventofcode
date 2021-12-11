@@ -1,3 +1,5 @@
+export const validation = [207, 848];
+
 export const formatInput = input => input.split('\n').map(r => r.split(''));
 
 const STATE = {
@@ -203,6 +205,7 @@ const calculateAllPositionsForRanges = ([min, max, ...rest]) => {
 	)
 }
 
+// TODO fix (real value is wrong)
 export const part2 = data => {
 	const TOTAL_DIMENSIONS = 4
 

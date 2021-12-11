@@ -1,3 +1,5 @@
+export const validation = [362271, 1698395182];
+
 export const formatInput = input => input.split('\n');
 
 const CHARACTER_MATCH = {

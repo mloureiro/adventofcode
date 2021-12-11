@@ -1,4 +1,6 @@
-export const formatInput = input => input.split('\n').filter(Boolean);
+export const validation = [590, 286];
+
+export const formatInput = input => input.split('\n');
 
 const INITIAL_DIRECTION = 'E'
 const COMPASS = ['N', 'E', 'S', 'W']
@@ -64,6 +66,7 @@ export const part1 = data => {
 	return Math.abs(position[0]) + Math.abs(position[1])
 }
 
+// TODO fix (real value is wrong)
 export const part2 = data => {
 	const moveShip = ([x, y], [wx, wy], amount) => [
 		x + (wx * amount),

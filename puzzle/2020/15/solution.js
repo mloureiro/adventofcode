@@ -1,3 +1,5 @@
+export const validation = [232, 18929178];
+
 export const formatInput = input => input.split(',').map(Number);
 
 const calculateValueInIteration = (data, iteration) => {

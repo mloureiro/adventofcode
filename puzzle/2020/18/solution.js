@@ -1,3 +1,5 @@
+export const validation = [86311597203806, 276894767062189];
+
 export const formatInput = input => input.split('\n');
 
 const isNumber = value => !isNaN(value)

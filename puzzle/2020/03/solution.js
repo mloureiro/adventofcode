@@ -1,3 +1,5 @@
+export const validation = [262, 2698900776];
+
 export const formatInput = input => input.split('\n').map(row => row.split(''));
 
 const TREE = '#'

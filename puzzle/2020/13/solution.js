@@ -1,3 +1,5 @@
+export const validation = [259, 210612924879242];
+
 export const formatInput = input => input.split('\n').filter(Boolean);
 
 export const part1 = data => {

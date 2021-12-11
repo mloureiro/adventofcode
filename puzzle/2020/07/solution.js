@@ -1,3 +1,5 @@
+export const validation = [164, 7872];
+
 export const formatInput = input => input.split('\n');
 
 const MY_BAG_COLOR = 'shiny gold'

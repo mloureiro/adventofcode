@@ -1,3 +1,5 @@
+export const validation = [1586, 703];
+
 export const formatInput = input => input.split('\n');
 
 const parseInstructions = rawInstruction => {

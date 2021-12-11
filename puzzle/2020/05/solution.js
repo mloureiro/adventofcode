@@ -1,3 +1,5 @@
+export const validation = [885, 623];
+
 export const formatInput = input => input.split('\n');
 
 const calculateSeatId = (col, row) => col * 8 + row

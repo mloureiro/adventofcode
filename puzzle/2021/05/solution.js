@@ -1,3 +1,5 @@
+export const validation = [6572, 21466];
+
 export const formatInput = input =>
 	input.split('\n').map(line => {
 		const [, xs, ys, xe, ye] = line.match(/^(\d+),(\d+)\s+?->\s+?(\d+),(\d+)$/)

@@ -1,3 +1,5 @@
+export const validation = [1594, 437];
+
 import { createMatrix } from '../../utils/matrix.js';
 
 export const formatInput = input =>

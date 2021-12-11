@@ -1,3 +1,5 @@
+export const validation = [39984, 8468];
+
 export const formatInput = input => {
 	const [sequence, ...boards] = input.split('\n\n');
 

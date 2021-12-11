@@ -1,3 +1,5 @@
+export const validation = [7120, 3570];
+
 export const formatInput = input => input.split('\n');
 
 // TODO fix it (not working currently 🤔)

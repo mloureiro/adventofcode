@@ -1,3 +1,5 @@
+export const validation = [2319, 2117];
+
 export const formatInput = input => input.split('\n');
 
 const state = {

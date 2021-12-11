@@ -1,3 +1,5 @@
+export const validation = [219, 127];
+
 export const formatInput = input => input.split('\n');
 
 // this does way too much, but it is to make less iterations
@@ -16,6 +18,7 @@ const parseValidateAndCountDocuments = (data, isDocumentValid) =>
 		[0, {}],
 	)[0]
 
+// TODO fix (real value is wrong by 1 off)
 export const part1 = data => {
 	const REQUIRED_FIELDS = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
 	const isDocumentValid = document =>

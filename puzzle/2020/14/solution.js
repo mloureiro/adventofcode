@@ -1,3 +1,5 @@
+export const validation = [15172047086292, 4197941339968];
+
 export const formatInput = input => input.split('\n');
 
 export const part1 = data => {

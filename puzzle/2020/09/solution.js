@@ -1,3 +1,5 @@
+export const validation = [57195069, 7409241];
+
 export const formatInput = input => input.split('\n').map(Number);
 
 export const part1 = (data, preambleSize = 25) => {

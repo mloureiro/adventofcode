@@ -1,3 +1,5 @@
+export const validation = [23036, 1909224687553];
+
 export const formatInput = input => {
 	const [rawRuleList, rawTicket, rawTickets] = input.split('\n\n').map(block => block.split('\n'))
 

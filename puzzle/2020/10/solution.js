@@ -1,3 +1,5 @@
+export const validation = [2100, 16198260678656];
+
 export const formatInput = input => input.split('\n').map(Number).sort((a, b) => a - b);
 
 export const part1 = data => {
@@ -20,6 +22,7 @@ export const part1 = data => {
 	return single * triple
 }
 
+// TODO fix (real value is wrong)
 export const part2 = data => {
 	// add edges
 	data.unshift(0)

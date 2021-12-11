@@ -1,3 +1,5 @@
+export const validation = [1616, 1645];
+
 export const formatInput = input => input.split('\n').map(Number);
 
 export const part1 = d =>
