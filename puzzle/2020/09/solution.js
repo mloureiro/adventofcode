@@ -1,11 +1,6 @@
-const fs = require('fs')
-const data = fs.readFileSync('./09.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
-	.map(string => parseInt(string, 10))
+export const formatInput = input => input.split('\n').map(Number);
 
-const firstChallenge = data => {
+export const part1 = (data, preambleSize = 25) => {
 	const isSumWithinList = (sum, list) => {
 		let i = 0, j = 1;
 		while (i + 1 < list.length) {
@@ -24,14 +19,14 @@ const firstChallenge = data => {
 
 	return data
 		.find((item, idx, self) =>
-			idx > 25
-				? !isSumWithinList(item, self.slice(idx - 25, idx))
+			idx > preambleSize
+				? !isSumWithinList(item, self.slice(idx - preambleSize, idx))
 				: false
 		)
 }
 
-const secondChallenge = data => {
-	const errElement = firstChallenge(data)
+export const part2 = (data, preambleSize) => {
+	const errElement = part1(data, preambleSize)
 	const list = data.slice(0, data.findIndex(x => x === errElement))
 
 	const rangeSum = (list, [start, end]) =>
@@ -71,9 +66,3 @@ const secondChallenge = data => {
 
 	return null
 }
-
-	console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
