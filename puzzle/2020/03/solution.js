@@ -1,9 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./03.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
-	.map(row => row.split(''))
+export const formatInput = input => input.split('\n').map(row => row.split(''));
 
 const TREE = '#'
 
@@ -34,10 +29,10 @@ const calculateTreesInPath = (map, [right, down]) => {
 	return totalTreesFound
 }
 
-const firstChallenge = data =>
+export const part1 = data =>
 	calculateTreesInPath(data, [3, 1])
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const paths = [
 		[1, 1],
 		[3, 1],
@@ -50,10 +45,3 @@ const secondChallenge = data => {
 		.reduce((total, path) =>
 			total * calculateTreesInPath(data, path), 1)
 }
-
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
