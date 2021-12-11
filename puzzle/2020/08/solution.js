@@ -1,8 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./08.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
+export const formatInput = input => input.split('\n');
 
 const parseInstructions = rawInstruction => {
 	try {
@@ -15,7 +11,7 @@ const parseInstructions = rawInstruction => {
 	}
 }
 
-const firstChallenge = data => {
+export const part1 = data => {
 	let instructionsVisited = {}
 	let accumulator = 0
 	let hasFinished = false
@@ -42,7 +38,7 @@ const firstChallenge = data => {
 	return accumulator
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const interpretInstruction = instruction => {
 		const [action, value] = parseInstructions(instruction)
 		switch (action) {
@@ -111,9 +107,3 @@ const secondChallenge = data => {
 
 	return accumulator
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
