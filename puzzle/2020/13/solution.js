@@ -1,11 +1,6 @@
-const fs = require('fs')
-const data = fs.readFileSync('./13.txt')
-	.toString()
-	.split('\n')
-	.filter(Boolean)
+export const formatInput = input => input.split('\n').filter(Boolean);
 
-
-const firstChallenge = data => {
+export const part1 = data => {
 	const calculateEarliestDeparture = (busId, earliestTimestamp) =>
 		(Math.floor(earliestTimestamp / busId) + 1) * busId
 
@@ -37,9 +32,10 @@ const firstChallenge = data => {
 	return (earliestPossibleBusDeparture - earliestTimestamp) * earliestPossibleBusId
 }
 
+// TODO make my own 🙃
 // shamelessly copied from @imbadatreading
 // src: https://www.reddit.com/r/adventofcode/comments/kc4njx/2020_day_13_solutions/gfth69h/
-const secondChallenge = data => {
+export const part2 = data => {
 	const busTimes = data[1].split(',')
 		.reduce((list, value, idx) =>
 				value !== 'x'
@@ -62,9 +58,3 @@ const secondChallenge = data => {
 
 	return time
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
