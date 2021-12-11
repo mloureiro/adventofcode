@@ -35,9 +35,9 @@ const scaffold = async (year, day, { force }) => {
 	const files = await readdir(makePathFromScript(template.directory));
 	// ensure template directory exists and has the expected files
 	const missingFiles = Object.values(template)
-		.filter(file => file !== template.directory && !files.includes(file))
+		.filter(file => file !== template.directory && !files.includes(file));
 	if (missingFiles.length)
-		throw Error(`Files "${missingFiles.join('", "')}" are missing from template directory.`)
+		throw Error(`Files "${missingFiles.join('", "')}" are missing from template directory.`);
 
 	const pathToPuzzleDirectory = makePathToPuzzle(year, day);
 	// ensure that the target puzzle is not yet set
@@ -50,7 +50,7 @@ const scaffold = async (year, day, { force }) => {
 	await Promise.all(files.map(file => copyFile(
 		makePathFromScript(template.directory, file),
 		makePathToPuzzle(year, day, file),
-	)))
+	)));
 };
 
 const runPuzzle = async (year, day, { test, watch, debug }) => {
@@ -76,7 +76,6 @@ const runPuzzle = async (year, day, { test, watch, debug }) => {
 			]);
 	}
 
-	console.log()
 	testsToRun.forEach(props => {
 		try {
 			runTest(...props)
@@ -89,29 +88,30 @@ const runPuzzle = async (year, day, { test, watch, debug }) => {
 const runTest = (label, solution, input, expectedResult) => {
 	const logLabel = string => string.padStart(10);
 	const log = (label, ...messages) =>
-		console.log(`${logLabel(label)}:`, ...messages)
+		console.log(`${logLabel(label)}:`, ...messages);
 
+	console.log();
 	console.time(logLabel('Time'));
 	try {
 		const result = solution(input);
 
 		if (!expectedResult)
-			log(label, chalk.white(result))
+			log(label, chalk.white(result));
 		else if (expectedResult === result)
-			log(label, chalk.green('✔︎'), chalk.white(result))
+			log(label, chalk.green('✔︎'), chalk.white(result));
 		else {
-			log(label, chalk.inverse.red('︎ ✖︎ '), chalk.white(result))
-			log('Expected', chalk.whiteBright(expectedResult))
+			log(label, chalk.inverse.red('︎ ✖︎ '), chalk.white(result));
+			log('Expected', chalk.whiteBright(expectedResult));
 		}
 	} finally {
 		console.timeEnd(logLabel('Time'));
-		console.log()
+		console.log();
 	}
 }
 
 const logError = (error, debug = false) => {
 	console.error(chalk.red.bold.inverse('ERROR'), chalk.red.bold(error.message));
-	if (debug) console.error(error)
+	if (debug) console.error(error);
 }
 
 const handleErrors = async (callback, debug) => {
@@ -132,14 +132,14 @@ const makePathToPuzzle = (year, day, ...rest) =>
 
 const hasFile = async path => {
 	try {
-		const stats = await stat(path)
+		const stats = await stat(path);
 
 		return !!stats
 	} catch (error) {
 		if (error.code === 'ENOENT')
 			return false
 
-		throw error
+		throw error;
 	}
 }
 
