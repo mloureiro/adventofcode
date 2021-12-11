@@ -1,0 +1,23 @@
+{
+  "name": "adventofcode",
+  "version": "1.0.0",
+  "description": "Fun with [Advent of Code](https://adventofcode.com/)",
+  "homepage": "https://github.com/mloureiro/adventofcode#readme",
+  "author": "Marcos Loureiro <mloureiro.dev@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mloureiro/adventofcode.git"
+  },
+  "type": "module",
+  "bin": {
+    "aoc": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "commander": "^8.3.0"
+  }
+}
