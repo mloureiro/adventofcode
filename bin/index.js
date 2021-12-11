@@ -19,6 +19,7 @@ program
 	.description('Run Advent of Code puzzles')
 	.option('-w, --watch', 'run puzzle on every change', false)
 	.option('-t, --test', 'run tests instead of input', false)
+	.option('-v, --validate', 'validate puzzle against test and expected results', false)
 	.option('-d, --debug', 'show full errors output', false)
 	.action(async (year, day, options) =>
 		handleErrors(() => runPuzzle(year, day, options), options.debug));
@@ -53,29 +54,29 @@ const scaffold = async (year, day, { force }) => {
 	)));
 };
 
-const runPuzzle = async (year, day, { test, watch, debug }) => {
+const runPuzzle = async (year, day, { test, watch, debug, validate }) => {
 	if (watch) throw Error('Watch is not implemented yet'); // TODO
 
 	const { formatInput, part1, part2, validation = [] } = await import(makePathToPuzzle(year, day, template.solution));
 	const input = formatInput((await readFile(makePathToPuzzle(year, day, template.input), 'utf8')).trim());
 
-	let testsToRun;
-	if (!test) {
+	let testsToRun = [];
+	if (!test || validate) {
 		const [result1, result2] = validation;
-		testsToRun = [
-			['Part 1', part1, input, result1],
-			['Part 2', part2, input, result2],
-		];
-	} else {
+		testsToRun.push(['Part 1', part1, input, result1]);
+		testsToRun.push(['Part 2', part2, input, result2]);
+	}
+
+	if (test || validate) {
 		const testFile = makePathToPuzzle(year, day, template.tests);
-		testsToRun = (await import(testFile)).tests
-			.map((test, idx) => [
-				`#${idx + 1} Part ${test.part}`,
+		(await import(testFile)).tests
+			.forEach((test, idx) => testsToRun.push([
+				`Test p${test.part} #${idx + 1}`,
 				test.part === 1 ? part1 : part2,
 				formatInput(test.input),
 				test.result,
 				test.args,
-			]);
+			]));
 	}
 
 	const logLabel = string => string.padStart(10);
