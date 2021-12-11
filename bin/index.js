@@ -53,23 +53,57 @@ const scaffold = async (year, day, { force }) => {
 	)))
 };
 
-const runPuzzle = async (year, day, { test, watch }) => {
+const runPuzzle = async (year, day, { test, watch, debug }) => {
 	if (watch) throw Error('Watch is not implemented yet'); // TODO
-	if (test) throw Error('Test is not implemented yet'); // TODO
 
 	const { formatInput, part1, part2 } = await import(makePathToPuzzle(year, day, template.solution));
 	const input = formatInput((await readFile(makePathToPuzzle(year, day, template.input), 'utf8')).trim());
 
-	runTest('Part 1', part1, input);
-	runTest('Part 2', part2, input);
+	let testsToRun;
+	if (!test) {
+		testsToRun = [
+			['Part 1', part1, input],
+			['Part 2', part2, input],
+		];
+	} else {
+		const testFile = makePathToPuzzle(year, day, template.tests);
+		testsToRun = (await import(testFile)).tests
+			.map((test, idx) => [
+				`#${idx + 1} Part ${test.part}`,
+				test.part === 1 ? part1 : part2,
+				formatInput(test.input),
+				test.result,
+			]);
+	}
+
+	testsToRun.forEach(props => {
+		try {
+			runTest(...props)
+		} catch (e) {
+			logError(e, debug);
+		}
+	});
 };
 
-const runTest = (label, solution, input) => {
+const runTest = (label, solution, input, expectedResult) => {
+	const logLabel = string => string.padStart(10);
+	const log = (label, ...messages) =>
+		console.log(`${logLabel(label)}:`, ...messages)
+
+	console.time(logLabel('Time'));
 	try {
-		console.time('Time\t');
-		console.log(`${label}\t:`, solution(input));
+		const result = solution(input);
+
+		if (!expectedResult)
+			log(label, chalk.white(result))
+		else if (expectedResult === result)
+			log(label, chalk.green('✔︎'), chalk.white(result))
+		else {
+			log(label, chalk.inverse.red('︎ ✖︎ '), chalk.white(result))
+			log('Expected', chalk.whiteBright(expectedResult))
+		}
 	} finally {
-		console.timeEnd('Time\t');
+		console.timeEnd(logLabel('Time'));
 		console.log()
 	}
 }
