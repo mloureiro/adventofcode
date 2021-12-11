@@ -77,38 +77,34 @@ const runPuzzle = async (year, day, { test, watch, debug }) => {
 			]);
 	}
 
-	testsToRun.forEach(props => {
-		try {
-			runTest(...props)
-		} catch (e) {
-			logError(e, debug);
-		}
-	});
-};
-
-const runTest = (label, solution, input, expectedResult = null, extraArgs = []) => {
 	const logLabel = string => string.padStart(10);
 	const log = (label, ...messages) =>
 		console.log(`${logLabel(label)}:`, ...messages);
 
 	console.log();
-	console.time(logLabel('Time'));
-	try {
-		const result = solution(input, ...extraArgs);
+	testsToRun.forEach(props => {
+		const [label, solution, input, expectedResult = null, extraArgs = []] = props
+		try {
+			console.time(logLabel('Time'));
+			console.log(chalk.bold.whiteBright(logLabel(label) + ':'));
+			const result = solution(input, ...extraArgs);
 
-		if (expectedResult === null)
-			log(label, chalk.white(result));
-		else if (expectedResult === result)
-			log(label, chalk.green('✔︎'), chalk.white(result));
-		else {
-			log(label, chalk.inverse.red('︎ ✖︎ '), chalk.white(result));
-			log('Expected', chalk.whiteBright(expectedResult));
+			if (expectedResult === null)
+				log('Result', chalk.white(result));
+			else if (expectedResult === result)
+				log('Result', chalk.green('✔︎'), chalk.white(result));
+			else {
+				log('Result', chalk.inverse.red('︎ ✖︎ '), chalk.white(result));
+				log('Expected', chalk.whiteBright(expectedResult));
+			}
+		} catch (e) {
+			logError(e, debug);
+		} finally {
+			console.timeEnd(logLabel('Time'));
+			console.log();
 		}
-	} finally {
-		console.timeEnd(logLabel('Time'));
-		console.log();
-	}
-}
+	});
+};
 
 const logError = (error, debug = false) => {
 	console.error(chalk.red.bold.inverse('ERROR'), chalk.red.bold(error.message));
