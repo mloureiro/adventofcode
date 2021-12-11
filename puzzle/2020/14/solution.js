@@ -1,10 +1,6 @@
-const fs = require('fs')
-const data = fs.readFileSync('./14.txt')
-	.toString()
-	.trim()
-	.split('\n')
+export const formatInput = input => input.split('\n');
 
-const firstChallenge = data => {
+export const part1 = data => {
 	const isMask = line =>
 		line.indexOf('mask') !== -1
 
@@ -20,7 +16,7 @@ const firstChallenge = data => {
 				]
 			})
 
-	const buildInstructions = program => {
+	const buildInstructions = () => {
 		const memoryPointers = {}
 		let currentMask = ''
 		for (let row of data) {
@@ -52,7 +48,6 @@ const firstChallenge = data => {
 
 	const applyMask = (binary, mask) => {
 		const finalBinaryArray = mask.split('')
-		let i = finalBinaryArray.length - 1;
 		for (let i = binary.length - 1; i >= 0; i--) {
 			const position = finalBinaryArray.length - (binary.length - i)
 			if (finalBinaryArray[position] === 'X')
@@ -74,7 +69,7 @@ const firstChallenge = data => {
 	)
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const instructions = data.map(line => {
 		if (line.includes('mask'))
 			return {
@@ -158,9 +153,3 @@ const secondChallenge = data => {
 
 	return Object.values(memory).reduce((t, v) => t + v)
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
