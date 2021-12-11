@@ -1,9 +1,4 @@
-const fs = require('fs')
-const data = fs.readFileSync('./17.txt')
-	.toString()
-	.trim()
-	.split('\n')
-	.map(line => line.split(''))
+export const formatInput = input => input.split('\n').map(r => r.split(''));
 
 const STATE = {
 	active: '#',
@@ -12,7 +7,7 @@ const STATE = {
 
 const TOTAL_CYCLES = 6
 
-const firstChallenge = data => {
+export const part1 = data => {
 	const key = (x, y, z) =>
 		`[${x}, ${y}, ${z}]`
 
@@ -62,25 +57,6 @@ const firstChallenge = data => {
 			},
 			0,
 		)
-	}
-
-	const logSpace = space => {
-		const [xMin, xMax, yMin, yMax, zMin, zMax] =
-			getSpaceOuterLayerCoordinates(space)
-
-		console.group('Space')
-		for (let z = zMin + 1; z < zMax; z++) {
-			console.group(`z = ${z}:`)
-			for (let y = yMin + 1; y < yMax; y++) {
-				let line = ''
-				for (let x = xMin + 1; x < xMax; x++) {
-					line += space[key(x, y, z)] || '.'
-				}
-				console.log(line)
-			}
-			console.groupEnd()
-		}
-		console.groupEnd()
 	}
 
 	const evaluate = (currentState = null, totalActiveSurroundings) =>
@@ -171,12 +147,12 @@ const parseSpace = (rawSpace, totalDimensions) => {
 
 	return Object.fromEntries(
 		recursive(rawSpace)
-		.map(([coordinates, value]) => {
-			while(coordinates.length < totalDimensions)
-				coordinates.push(0)
+			.map(([coordinates, value]) => {
+				while(coordinates.length < totalDimensions)
+					coordinates.push(0)
 
-			return [key(coordinates), value]
-		})
+				return [key(coordinates), value]
+			})
 	)
 }
 
@@ -227,7 +203,7 @@ const calculateAllPositionsForRanges = ([min, max, ...rest]) => {
 	)
 }
 
-const secondChallenge = data => {
+export const part2 = data => {
 	const TOTAL_DIMENSIONS = 4
 
 	let space = parseSpace(data, TOTAL_DIMENSIONS)
@@ -257,9 +233,3 @@ const secondChallenge = data => {
 
 	return Object.values(space).length
 }
-
-console.log(`
-Result
-  1st: ${firstChallenge(data)}
-  2nd: ${secondChallenge(data)}
-`)
