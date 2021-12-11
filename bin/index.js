@@ -76,6 +76,7 @@ const runPuzzle = async (year, day, { test, watch, debug }) => {
 			]);
 	}
 
+	console.log()
 	testsToRun.forEach(props => {
 		try {
 			runTest(...props)
