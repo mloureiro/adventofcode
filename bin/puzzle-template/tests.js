@@ -3,6 +3,6 @@ const input = `
 `.trim();
 
 export const tests = [
-	{ part: 1, input, result: 0 },
-	{ part: 2, input, result: 0 },
+	{ part: 1, result: 0, input },
+	{ part: 2, result: 0, input },
 ];
