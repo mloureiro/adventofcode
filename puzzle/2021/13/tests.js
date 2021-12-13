@@ -29,7 +29,8 @@ const printResult = `
 #...#
 #####
 .....
-.....`;
+.....`
+	.replace(/\./g, ' ');
 
 export const tests = [
 	{ part: 1, result: 17, input },

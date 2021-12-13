@@ -1,10 +1,13 @@
-export const validation = [592, `
+export const validation = [
+	592, `
 ..##..##...##....##.####.####.#..#.#..#.
 ...#.#..#.#..#....#.#....#....#.#..#..#.
 ...#.#....#..#....#.###..###..##...#..#.
 ...#.#.##.####....#.#....#....#.#..#..#.
 #..#.#..#.#..#.#..#.#....#....#.#..#..#.
-.##...###.#..#..##..####.#....#..#..##..`];
+.##...###.#..#..##..####.#....#..#..##..`
+		.replace(/\./g, ' '),
+];
 
 export const formatInput = input => {
 	let thresholdFound = false;
@@ -85,5 +88,5 @@ export const part2 = input => {
 	input.dots.forEach(([x, y]) => matrix.addDot(x, y));
 	input.folds.forEach(([axis, position]) => matrix = fold(matrix, axis, position));
 
-	return '\n' + matrix.toString();
+	return '\n' + matrix.toString().replace(/\./g, ' ');
 };
