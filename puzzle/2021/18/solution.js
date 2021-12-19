@@ -1,4 +1,4 @@
-export const validation = [];
+export const validation = [3935, 4669];
 
 export function formatInput(input) {
 	return input.split('\n')
