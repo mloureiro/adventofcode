@@ -79,10 +79,15 @@ const scaffold = async (year, day, { force }) => {
 
 const createWatcher = (paths, callback) => {
 	const watcher = chokidar.watch(paths, { persistent: true });
-	const clearAndRun = () => {
+	const clearAndRun = async () => {
 		console.clear();
 		console.log(chalk.bold.whiteBright(`[${new Date().toLocaleTimeString()}]`));
-		callback();
+
+		try {
+			await callback();
+		} catch (error) {
+			console.error(chalk.bold.redBright('ERROR'), '\n', error);
+		}
 	};
 	return watcher
 		.on('change', clearAndRun)
