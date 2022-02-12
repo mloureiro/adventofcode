@@ -11,5 +11,4 @@ export const tests = [
 	{ part: 1, result: 114, input: input('y RSHIFT 2 -> a') },
 	{ part: 1, result: 65412, input: input('NOT x -> a') },
 	{ part: 1, result: 65079, input: input('NOT y -> a') },
-	// { part: 2, result: 0, input: '' },
 ];
