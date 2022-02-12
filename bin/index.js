@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-import { copyFile, mkdir, readdir, readFile, stat, writeFile} from 'fs/promises';
+import { copyFile, mkdir, readdir, readFile, stat, writeFile } from 'fs/promises';
 import path from 'path';
 import { Command } from 'commander';
 import chalk from 'chalk';
+import chokidar from 'chokidar';
 import { initClient } from '../lib/client.js';
 
 const template = {
@@ -23,7 +24,7 @@ program
 	.option('-v, --validate', 'validate puzzle against test and expected results', false)
 	.option('-d, --debug', 'show full errors output', false)
 	.action(async (year, day, options) =>
-		handleErrors(() => runPuzzle(year, day, options), options.debug));
+		handleErrors(() => runPuzzleWithWatcher(year, day, options), options.debug));
 
 program
 	.command('init <year> <day>')
@@ -74,9 +75,37 @@ const scaffold = async (year, day, { force }) => {
 	console.log();
 };
 
-const runPuzzle = async (year, day, { test, watch, debug, validate }) => {
-	if (watch) throw Error('Watch is not implemented yet'); // TODO
+const createWatcher = (paths, callback) => {
+	const watcher = chokidar.watch(paths, { persistent: true });
+	const clearAndRun = () => {
+		console.clear();
+		console.log(chalk.bold.whiteBright(`[${new Date().toLocaleTimeString()}]`));
+		callback();
+	};
+	return watcher
+		.on('change', clearAndRun)
+		.on('ready', clearAndRun)
+};
 
+const runPuzzleWithWatcher = async (year, day, options) => {
+	if (!options.watch)
+		return runPuzzle(year, day, options)
+
+	const watcher = createWatcher(
+		[
+			makePathFromScript('..', 'lib'),
+			makePathToPuzzle(year, day),
+		],
+		() => runPuzzle(year, day, options),
+	);
+
+	process.on('SIGINT', () => {
+		watcher.close();
+		process.exit();
+	});
+};
+
+const runPuzzle = async (year, day, { test, watch, debug, validate }) => {
 	const { formatInput, part1, part2, validation = [] } = await import(makePathToPuzzle(year, day, template.solution));
 	const input = formatInput((await readFile(makePathToPuzzle(year, day, template.input), 'utf8')).trim());
 
