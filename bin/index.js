@@ -14,6 +14,8 @@ const template = {
 	tests: 'tests.js',
 };
 
+const importWithoutCache = path => import(path + '?cache=' + Date.now());
+
 const program = new Command();
 
 program
@@ -106,7 +108,7 @@ const runPuzzleWithWatcher = async (year, day, options) => {
 };
 
 const runPuzzle = async (year, day, { test, watch, debug, validate }) => {
-	const { formatInput, part1, part2, validation = [] } = await import(makePathToPuzzle(year, day, template.solution));
+	const { formatInput, part1, part2, validation = [] } = await importWithoutCache(makePathToPuzzle(year, day, template.solution));
 	const input = formatInput((await readFile(makePathToPuzzle(year, day, template.input), 'utf8')).trim());
 
 	let testsToRun = [];
@@ -118,7 +120,7 @@ const runPuzzle = async (year, day, { test, watch, debug, validate }) => {
 
 	if (test || validate) {
 		const testFile = makePathToPuzzle(year, day, template.tests);
-		(await import(testFile)).tests
+		(await importWithoutCache(testFile)).tests
 			.forEach((test, idx) => testsToRun.push([
 				`Test p${test.part} #${idx + 1}`,
 				test.part === 1 ? part1 : part2,
