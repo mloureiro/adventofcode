@@ -81,7 +81,7 @@ const createWatcher = (paths, callback) => {
 	const watcher = chokidar.watch(paths, { persistent: true });
 	const clearAndRun = async () => {
 		console.clear();
-		console.log(chalk.bold.whiteBright(`[${new Date().toLocaleTimeString()}]`));
+		console.log(chalk.bold.whiteBright(`###### [${new Date().toLocaleTimeString()}] ######`));
 
 		try {
 			await callback();
