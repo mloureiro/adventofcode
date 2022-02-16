@@ -1,17 +1,10 @@
-export const validation = [];
+export const validation = ['hepxxyzz', 'heqaabcc'];
 
 export const formatInput = input => input;
 
 const isSequence = str => str.split('')
-	.every((c, i, s) => {
-		// console.log('>', i, c, s[i - 1], {
-		// 	isFirst: i === 0,
-		// 	code: c.charCodeAt(0),
-		// 	prev: i !== 0 && s[i - 1].charCodeAt(0),
-		// 	isSeq: i !== 0 && c.charCodeAt(0) === 1 + s[i - 1].charCodeAt(0),
-		// })
-		return i === 0 || c.charCodeAt(0) === 1 + s[i - 1].charCodeAt(0);
-	});
+	.every((c, i, s) =>
+		i === 0 || c.charCodeAt(0) === 1 + s[i - 1].charCodeAt(0));
 
 const incrementStr = str => {
 	let updatedStr = str.split('');

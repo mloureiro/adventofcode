@@ -1,12 +1,12 @@
 import md5 from 'crypto-js/md5.js';
 
-export const validation = [];
+export const validation = [117946, 3938038];
 
 export const formatInput = input => input;
 
 const findNumber = (secret, initialValue) => {
 	let i = 0;
-	while(true) {
+	while (true) {
 		if (md5(secret + i).toString().startsWith(initialValue))
 			return i;
 		i++;
