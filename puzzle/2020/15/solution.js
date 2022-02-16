@@ -3,7 +3,7 @@ export const validation = [232, 18929178];
 export const formatInput = input => input.split(',').map(Number);
 
 const calculateValueInIteration = (data, iteration) => {
-	const calculatePosition = (position, {previousPosition}) => ({
+	const calculatePosition = (position, { previousPosition }) => ({
 		difference: previousPosition
 			? position - previousPosition
 			: null,
@@ -32,6 +32,7 @@ export const part1 = data => {
 	return calculateValueInIteration(data, 2020)
 }
 
+// TODO improve performance (>10min)
 export const part2 = data => {
 	return calculateValueInIteration(data, 30000000)
 }

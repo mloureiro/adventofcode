@@ -44,6 +44,7 @@ export const part1 = input => {
 	return password;
 };
 
+// TODO improve performance (>2.5s)
 export const part2 = input => {
 	return part1(part1(input));
 };

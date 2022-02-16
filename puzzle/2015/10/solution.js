@@ -31,5 +31,6 @@ export const part1 = (input, customIterations = null) => {
 		: sequence.length;
 };
 
+// TODO improve performance (>5s)
 export const part2 = input =>
 	part1(input, 50).length;

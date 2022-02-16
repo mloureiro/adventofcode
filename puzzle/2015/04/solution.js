@@ -17,6 +17,7 @@ export const part1 = input => {
 	return findNumber(input, '00000');
 };
 
+// TODO improve performance (>20s)
 export const part2 = input => {
 	return findNumber(input, '000000');
 };

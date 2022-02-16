@@ -60,6 +60,7 @@ export const part1 = (lightsGrid, iterations = 100) => {
 	return countLightsOn(finalGrid.flat());
 };
 
+// TODO improve performance (>1.5s)
 export const part2 = (lightsGrid, iterations = 100) => {
 	const isSquareEdge = ([x, y], grid) =>
 		[

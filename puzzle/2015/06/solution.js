@@ -20,7 +20,7 @@ const execute = (map, action, xs, ys, xe, ye) => {
 
 export const part1 = input => {
 	const applyAction = action => state => {
-		switch(action) {
+		switch (action) {
 			case 'turn on': return 1;
 			case 'turn off': return 0;
 			case 'toggle': return state === 1 ? 0 : 1;
@@ -28,16 +28,17 @@ export const part1 = input => {
 	}
 
 	const map = createMap(1000, 1000);
-	input.forEach(([action, ...props]) => execute(map,applyAction(action), ...props))
+	input.forEach(([action, ...props]) => execute(map, applyAction(action), ...props))
 	return map.reduce(
 		(a, r) => a + r.reduce((t, s) => t + s, 0),
 		0,
 	);
 };
 
+// TODO improve performance (>1s)
 export const part2 = input => {
 	const applyAction = action => state => {
-		switch(action) {
+		switch (action) {
 			case 'turn on': return state + 1;
 			case 'turn off': return state === 0 ? 0 : state - 1;
 			case 'toggle': return state + 2;
@@ -45,7 +46,7 @@ export const part2 = input => {
 	}
 
 	const map = createMap(1000, 1000);
-	input.forEach(([action, ...props]) => execute(map,applyAction(action), ...props))
+	input.forEach(([action, ...props]) => execute(map, applyAction(action), ...props))
 	return map.reduce(
 		(a, r) => a + r.reduce((t, s) => t + s, 0),
 		0,
